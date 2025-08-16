@@ -43,7 +43,6 @@ class AgentState(TypedDict):
     is_forbidden: bool = False
 
 def load_history():
-    ## load with using utf-8 encoding
 
     if not os.path.exists("storage.txt"):
         return []
@@ -61,13 +60,15 @@ def load_history():
 
 
 def save_interaction(user_message: str, ai_message: AIMessage):
-    ## save with using utf-8 encoding
+
     with open("storage.txt", "a", encoding="utf-8") as file:
         file.write(f"User: {user_message}\n")
         file.write(f"AI: {ai_message.content}\n")
 
 
-@tool #async?
+
+## tools are for just simple math operations, if you need more complex operations, you can implement them in the main code.
+@tool
 def add(a:int, b:int):
     "This is adding function"
     return f"{a+b}"
@@ -95,8 +96,7 @@ def node_analyze_intent(state: AgentState):
     Intent should be one of: 'greeting', 'question', 'leaving'
     Return only the intent.
     """
-    #intent = model.invoke([SystemMessage(content=prompt)])
-    intent = AIMessage(content="greeting")
+    intent = model.invoke([SystemMessage(content=prompt)])
     state["messages"].append(intent)
     print(f"Intent: {intent.content}")
     return state
